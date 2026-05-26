@@ -5,27 +5,23 @@
 
 ---
 
-## Estado al 2026-05-26 (cierre de sesión)
+## Estado al 2026-05-26
 
 **Última tarea activa:**
-Se conectó la app con Google Apps Script (URL funcional, conexión exitosa).
-Quedó pendiente actualizar el código del script para que cree la planilla "GastosCMR"
-automáticamente usando DriveApp.create en vez de getActiveSpreadsheet.
-El código fix ya está en el repo local y en GitHub (commit b1784f9).
+Sincronización con Google Sheets completada y funcionando.
+La app guarda automáticamente los gastos en la planilla "GastosCMR"
+(hoja "Transferencias") en Google Drive del usuario.
 
 **Estado general:**
 En progreso
 
 **Próximo paso concreto:**
-1. En script.google.com: abrir el proyecto, reemplazar código con la versión nueva
-2. Implementar → Gestionar implementaciones → Editar → Implementar
-3. En la app: Probar conexión → Autorizar permisos → Agregar gasto de prueba
-4. Verificar que la planilla "GastosCMR" aparece en Google Drive
+Preguntar al usuario qué desea hacer a continuación.
 
 **Notas importantes (no olvidar):**
-- URL del Apps Script: https://script.google.com/macros/s/AKfycbw9DWDyLYQXHix-1RBvzVrSg5tf2f0XGihUlgkfXA9t7UN358QsOZzXYHCa0B4G7uuI/exec
-- El código fix usa DriveApp.getFilesByName('GastosCMR') y SpreadsheetApp.create('GastosCMR')
-- La primera vez pedirá autorización de permisos (Drive + Sheets)
+- URL actual del Apps Script: https://script.google.com/macros/s/AKfycbx0VIxBU714hlRRZ3riMtJzWpU0j3DTTqLf4OJD1AsclcW6NI_2IlpYLx3bwE7orVnH/exec
+- El script busca la planilla "GastosCMR" en Drive, si no existe la crea
+- Los datos viajan como text/plain (no-cors) por compatibilidad con Apps Script
 - Las categorías se persisten en localStorage (clave: mis_transferencias_categorias)
 - Chart.js se carga desde CDN
 
@@ -34,17 +30,17 @@ En progreso
 ## Contexto rápido
 
 **¿En qué parte del proyecto estamos?**
-Desarrollo — integración con Google Sheets
+Completada la integración con Google Sheets
 
 **¿Qué funciona bien hoy?**
 - App publicada en GitHub Pages con gráficos, pestañas y timeline
 - Categorías dinámicas con paleta de colores automática
 - Modal con monto por cuota
 - Exportar/Importar JSON
-- Google Apps Script desplegado y conectado
+- Sincronización con Google Sheets (planilla "GastosCMR")
+- Persistencia local con localStorage
 
 **¿Qué está incompleto?**
-- Script de Apps Script necesita actualizarse al fix (crear planilla "GastosCMR")
 - No hay tests automatizados
 - No hay lint/typecheck configurado
 
@@ -54,8 +50,8 @@ Desarrollo — integración con Google Sheets
 
 | Fecha | Qué se hizo |
 |-------|-------------|
-| 2026-05-26 | Google Sheets: se creó el script, se conectó la app, se subió todo a GitHub |
-| 2026-05-26 | Sesión inicial: gráficos, pestañas, timeline, categorías dinámicas |
+| 2026-05-26 | Google Sheets funcionando: planilla GastosCMR creada automáticamente |
+| 2026-05-26 | Gráficos, pestañas, timeline, categorías dinámicas |
 
 > Ver `REGISTRO_SESIONES.md` para el historial completo.
 
