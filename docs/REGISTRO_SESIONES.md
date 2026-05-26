@@ -12,7 +12,31 @@ Ser honesto con los problemas — ayuda a evitar repetirlos.
 
 ---
 
-## 2026-05-26 Segunda parte — Google Sheets y push a GitHub
+## 2026-05-26 Tercera parte — Carga desde Google Sheets (lectura)
+
+**Duración aproximada:** 15 min
+
+**Completado:**
+- Apps Script: se agregó `doGet` con `action=read` que devuelve los gastos desde la planilla "GastosCMR"
+- Apps Script: soporte JSONP (`callback` parameter) para lectura cross-origin sin CORS
+- App: función `cargarDesdeSheets()` que usa JSONP (script tag injection) para leer datos
+- App: botón "Cargar" tanto en el toolbar como en la sección de configuración
+- App: auto-carga al inicio si la URL de Sheets está configurada
+- Se limpió `codigo_google_apps_script.js`: se eliminó el endpoint `auth` y la función `testAuth()`
+- Se actualizó TRASPASO.md, se commit y push a GitHub
+
+**Problemas encontrados:**
+- `no-cors` mode no permite leer la respuesta del fetch → se usó JSONP con `<script>` tag
+
+**Aprendizajes:**
+- Google Apps Script soporta JSONP nativamente con `callback` parameter
+- JSONP permite comunicación cross-origin sin CORS porque los script tags no tienen restricciones
+
+**Próximo paso:**
+- El usuario debe actualizar el código del Apps Script en script.google.com
+- Luego preguntar qué más desea hacer
+
+---
 
 **Duración aproximada:** 30 min
 

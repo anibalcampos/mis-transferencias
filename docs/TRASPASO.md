@@ -8,15 +8,15 @@
 ## Estado al 2026-05-26
 
 **Última tarea activa:**
-Sincronización con Google Sheets completada y funcionando.
-La app guarda automáticamente los gastos en la planilla "GastosCMR"
-(hoja "Transferencias") en Google Drive del usuario.
+Se agregó carga desde Google Sheets (lectura vía JSONP) con botón "Cargar"
+y auto-sync al abrir la página. La app ahora escribe y lee de la planilla "GastosCMR".
 
 **Estado general:**
 En progreso
 
 **Próximo paso concreto:**
-Preguntar al usuario qué desea hacer a continuación.
+Actualizar el código del Apps Script en script.google.com (tiene el nuevo `action=read`).
+Luego preguntar al usuario qué desea hacer.
 
 **Notas importantes (no olvidar):**
 - URL actual del Apps Script: https://script.google.com/macros/s/AKfycbx0VIxBU714hlRRZ3riMtJzWpU0j3DTTqLf4OJD1AsclcW6NI_2IlpYLx3bwE7orVnH/exec
@@ -37,7 +37,8 @@ Completada la integración con Google Sheets
 - Categorías dinámicas con paleta de colores automática
 - Modal con monto por cuota
 - Exportar/Importar JSON
-- Sincronización con Google Sheets (planilla "GastosCMR")
+- Sincronización con Google Sheets (planilla "GastosCMR") — guardar y cargar
+- Carga automática desde Sheets al abrir la página
 - Persistencia local con localStorage
 
 **¿Qué está incompleto?**
@@ -50,6 +51,7 @@ Completada la integración con Google Sheets
 
 | Fecha | Qué se hizo |
 |-------|-------------|
+| 2026-05-26 | Carga desde Sheets (JSONP + botón + auto-sync) |
 | 2026-05-26 | Google Sheets funcionando: planilla GastosCMR creada automáticamente |
 | 2026-05-26 | Gráficos, pestañas, timeline, categorías dinámicas |
 
