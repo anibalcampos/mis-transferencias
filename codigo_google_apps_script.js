@@ -1,5 +1,5 @@
 const NOMBRE_HOJA = 'Transferencias';
-const TOKEN = 'mi_token_secreto'; // CAMBIALO por algo solo tuyo
+const TOKEN = 'cucho'; // CAMBIALO por algo solo tuyo
 
 function autorizado_(token) {
   return token === TOKEN;
@@ -39,6 +39,7 @@ function leerGastos() {
   const montoIdx = headers.indexOf('Monto Total');
   const cuotasIdx = headers.indexOf('Cuotas');
   const inicioIdx = headers.indexOf('Inicio');
+  const progIdx = headers.indexOf('Programado');
   if (idIdx === -1) return [];
   const gastos = [];
   for (let i = 1; i < data.length; i++) {
@@ -49,7 +50,8 @@ function leerGastos() {
       cat: row[catIdx] || '',
       monto: Number(row[montoIdx]) || 0,
       cuotas: Number(row[cuotasIdx]) || 1,
-      inicio: row[inicioIdx] || ''
+      inicio: row[inicioIdx] || '',
+      programado: progIdx >= 0 ? row[progIdx] === 'Sí' : false
     });
   }
   return gastos;
@@ -87,8 +89,8 @@ function guardarGastos(gastos) {
   const ss = getSpreadsheet_();
   let sheet = ss.getSheetByName(NOMBRE_HOJA);
   if (!sheet) sheet = ss.insertSheet(NOMBRE_HOJA);
-  const headers = ['ID', 'Descripción', 'Categoría', 'Monto Total', 'Cuotas', 'Inicio'];
-  const rows = gastos.map(g => [g.id, g.desc, g.cat, g.monto, g.cuotas, g.inicio]);
+  const headers = ['ID', 'Descripción', 'Categoría', 'Monto Total', 'Cuotas', 'Inicio', 'Programado'];
+  const rows = gastos.map(g => [g.id, g.desc, g.cat, g.monto, g.cuotas, g.inicio, g.programado ? 'Sí' : 'No']);
   sheet.clear();
   const data = [headers, ...rows];
   sheet.getRange(1, 1, data.length, headers.length).setValues(data);

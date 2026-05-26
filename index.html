@@ -105,6 +105,7 @@
   .metric.green::after { background: var(--green); }
   .metric.amber::after { background: var(--amber); }
   .metric.purple::after { background: var(--purple); }
+  .metric.red::after { background: var(--red); }
   .metric-icon { font-size: 18px; margin-bottom: 10px; }
   .metric-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text3); font-weight: 500; }
   .metric-value { font-size: 22px; font-weight: 600; margin-top: 2px; }
@@ -112,6 +113,7 @@
   .metric.green .metric-value { color: var(--green); }
   .metric.amber .metric-value { color: var(--amber); }
   .metric.purple .metric-value { color: var(--purple); }
+  .metric.red .metric-value { color: var(--red); }
 
   /* TOOLBAR */
   .toolbar { display: flex; gap: 10px; margin-bottom: 1.4rem; flex-wrap: wrap; align-items: center; }
@@ -152,6 +154,8 @@
   .btn-primary:hover { background: var(--accent2); border-color: var(--accent2); box-shadow: 0 4px 20px var(--accent-glow); }
   .btn svg, .btn-icon { width: 15px; height: 15px; }
   .spacer { flex: 1; }
+  .filter-check { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text2); cursor: pointer; user-select: none; }
+  .filter-check input { accent-color: var(--accent); }
 
   /* TABLE */
   .table-card {
@@ -403,6 +407,10 @@
     </select>
     <select id="filterCat" onchange="render()"></select>
     <div class="spacer"></div>
+    <label class="filter-check" title="Mostrar solo los que faltan programar">
+      <input type="checkbox" id="filterPendProg" onchange="render()">
+      <span>Pendientes</span>
+    </label>
     <button class="btn" onclick="exportarJSON()" title="Exportar respaldo JSON">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       Exportar
@@ -440,6 +448,7 @@
               <th>Progreso</th>
               <th>Período</th>
               <th>Estado</th>
+              <th>Programado</th>
               <th></th>
             </tr>
           </thead>
@@ -561,9 +570,9 @@ function cargarDatos() {
     } else {
       // datos de ejemplo
       gastos = [
-        { id: 1, desc: 'Cama sommier', cat: 'Hogar', monto: 300000, cuotas: 3, inicio: '2025-06' },
-        { id: 2, desc: 'Casaca', cat: 'Ropa', monto: 80000, cuotas: 2, inicio: '2025-05' },
-        { id: 3, desc: 'Entradas concierto (x2)', cat: 'Entretención', monto: 90000, cuotas: 3, inicio: '2025-05' },
+        { id: 1, desc: 'Cama sommier', cat: 'Hogar', monto: 300000, cuotas: 3, inicio: '2025-06', programado: true },
+        { id: 2, desc: 'Casaca', cat: 'Ropa', monto: 80000, cuotas: 2, inicio: '2025-05', programado: false },
+        { id: 3, desc: 'Entradas concierto (x2)', cat: 'Entretención', monto: 90000, cuotas: 3, inicio: '2025-05', programado: false },
       ];
       nextId = 4;
       guardarLocal();
@@ -663,7 +672,7 @@ function handleCargaSheets(res) {
     return;
   }
   if (res.gastos.length === 0) { showToast('Conectado — la planilla está vacía', 'success'); return; }
-  gastos = res.gastos;
+  gastos = res.gastos.map(g => ({ ...g, programado: g.programado === true }));
   nextId = Math.max(...gastos.map(g => g.id), 0) + 1;
   guardarLocal();
   actualizarSyncStatus(true);
@@ -762,10 +771,11 @@ function render() {
   });
 
   // metrics
-  let totalProg = 0, totalMes = 0, pendiente = 0;
+  let totalProg = 0, totalMes = 0, pendiente = 0, pendProg = 0;
   gastos.forEach(g => {
     const c = g.monto / g.cuotas;
     totalProg += g.monto;
+    if (!g.programado) pendProg++;
     for (let i = 0; i < g.cuotas; i++) {
       const ym = addMonths(g.inicio, i);
       if (ym === now) totalMes += c;
@@ -793,12 +803,19 @@ function render() {
       <div class="metric-label">Ítems</div>
       <div class="metric-value">${gastos.length}</div>
     </div>
+    <div class="metric ${pendProg > 0 ? 'red' : 'green'}">
+      <div class="metric-icon">${pendProg > 0 ? '⚠️' : '✅'}</div>
+      <div class="metric-label">Por programar</div>
+      <div class="metric-value">${pendProg}</div>
+    </div>
   `;
 
   const tbody = document.getElementById('tbody');
   tbody.innerHTML = '';
 
-  const filtrados = gastos.filter(g => !filterCat || g.cat === filterCat);
+  let filtrados = gastos.filter(g => !filterCat || g.cat === filterCat);
+  const soloPendProg = document.getElementById('filterPendProg').checked;
+  if (soloPendProg) filtrados = filtrados.filter(g => !g.programado);
 
   if (filterMes) {
     let monthTotal = 0, shown = 0;
@@ -814,17 +831,17 @@ function render() {
       }
     });
     if (shown === 0) {
-      tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="big">🗓</div><p>Sin gastos para este mes</p></div></td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="big">🗓</div><p>Sin gastos para este mes</p></div></td></tr>`;
     } else {
       const tr = document.createElement('tr');
       tr.className = 'total-row';
-      tr.innerHTML = `<td colspan="2">Total ${ymLabel(filterMes)}</td><td class="total-amt">${fmt(monthTotal)}</td><td colspan="4"></td>`;
+      tr.innerHTML = `<td colspan="2">Total ${ymLabel(filterMes)}</td><td class="total-amt">${fmt(monthTotal)}</td><td colspan="5"></td>`;
       tbody.appendChild(tr);
     }
   } else {
     const monthsList = allMonths();
     if (monthsList.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="big">✨</div><p>Agrega tu primera transferencia</p></div></td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="big">✨</div><p>Agrega tu primera transferencia</p></div></td></tr>`;
       return;
     }
     monthsList.forEach(ym => {
@@ -845,7 +862,7 @@ function render() {
       const hdr = document.createElement('tr');
       hdr.className = 'month-row';
       const isNow = ym === now;
-      hdr.innerHTML = `<td colspan="7">${ymLabel(ym)}${isNow ? ' <span class="estado-badge estado-active" style="margin-left:6px;">Mes actual</span>' : ''}<span class="month-total">${fmt(monthTotal)}</span></td>`;
+      hdr.innerHTML = `<td colspan="8">${ymLabel(ym)}${isNow ? ' <span class="estado-badge estado-active" style="margin-left:6px;">Mes actual</span>' : ''}<span class="month-total">${fmt(monthTotal)}</span></td>`;
       tbody.appendChild(hdr);
       rows.forEach(r => tbody.appendChild(r));
     });
@@ -873,6 +890,10 @@ function makeRow(g, cuotaMonto, idx, estado, ym) {
 
   const periodo = g.cuotas === 1 ? ymLabel(g.inicio) : `${ymLabel(g.inicio)} → ${ymLabel(fin)}`;
 
+  const checkIcon = g.programado
+    ? '<span style="cursor:pointer;font-size:18px;color:var(--green);" onclick="toggleProgramado(' + g.id + ')">✓</span>'
+    : '<span style="cursor:pointer;font-size:18px;color:var(--text3);opacity:0.4;" onclick="toggleProgramado(' + g.id + ')">○</span>';
+
   tr.innerHTML = `
     <td>
       <div class="item-name">${g.desc}</div>
@@ -886,6 +907,7 @@ function makeRow(g, cuotaMonto, idx, estado, ym) {
     <td><div class="cuota-dots">${dots}</div></td>
     <td style="font-size:12px; color:var(--text2);">${periodo}</td>
     <td>${estadoHtml}</td>
+    <td style="text-align:center;font-size:18px;">${checkIcon}</td>
     <td><button class="icon-btn" onclick="eliminar(${g.id})" title="Eliminar">✕</button></td>
   `;
   return tr;
@@ -917,12 +939,21 @@ function guardar() {
     return;
   }
   const monto = cuotaMonto * cuotas;
-  gastos.push({ id: nextId++, desc, cat, monto, cuotas, inicio });
+  gastos.push({ id: nextId++, desc, cat, monto, cuotas, inicio, programado: false });
   guardarLocal();
   guardarSheets();
   closeModal();
   render();
   showToast('✓ Transferencia agregada', 'success');
+}
+
+function toggleProgramado(id) {
+  const g = gastos.find(x => x.id === id);
+  if (!g) return;
+  g.programado = !g.programado;
+  guardarLocal();
+  guardarSheets();
+  render();
 }
 
 function eliminar(id) {
@@ -954,7 +985,7 @@ function importarJSON(event) {
     try {
       const d = JSON.parse(e.target.result);
       if (!d.gastos) throw new Error();
-      gastos = d.gastos;
+      gastos = d.gastos.map(g => ({ ...g, programado: g.programado === true }));
       nextId = d.nextId || (gastos.length + 1);
       guardarLocal();
       render();
