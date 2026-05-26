@@ -4,6 +4,10 @@ function doGet(e) {
   if (e && e.parameter && e.parameter.action === 'ping') {
     return ContentService.createTextOutput(JSON.stringify({ ok: true }));
   }
+  if (e && e.parameter && e.parameter.action === 'auth') {
+    DriveApp.getRootFolder();
+    return ContentService.createTextOutput(JSON.stringify({ ok: true, msg: 'Autorizado correctamente' }));
+  }
   return ContentService.createTextOutput(JSON.stringify({ ok: false, error: 'Acción no válida' }));
 }
 
