@@ -1,7 +1,20 @@
 const NOMBRE_HOJA = 'Transferencias';
+const TOKEN = 'mi_token_secreto'; // CAMBIALO por algo solo tuyo
+
+function autorizado_(token) {
+  return token === TOKEN;
+}
 
 function doGet(e) {
   if (e && e.parameter && e.parameter.action === 'read') {
+    if (!autorizado_(e.parameter.token)) {
+      const err = JSON.stringify({ ok: false, error: 'No autorizado' });
+      if (e.parameter.callback) {
+        return ContentService.createTextOutput(e.parameter.callback + '(' + err + ')')
+          .setMimeType(ContentService.MimeType.JAVASCRIPT);
+      }
+      return ContentService.createTextOutput(err);
+    }
     const data = leerGastos();
     const payload = JSON.stringify({ ok: true, gastos: data });
     if (e.parameter.callback) {
@@ -45,6 +58,9 @@ function leerGastos() {
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
+    if (!autorizado_(data.token)) {
+      return ContentService.createTextOutput(JSON.stringify({ ok: false, error: 'No autorizado' }));
+    }
     if (data.action === 'save' && Array.isArray(data.gastos)) {
       guardarGastos(data.gastos);
       return ContentService.createTextOutput(JSON.stringify({ ok: true }));

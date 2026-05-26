@@ -31,6 +31,12 @@ Ser honesto con los problemas — ayuda a evitar repetirlos.
 **Aprendizajes:**
 - Google Apps Script soporta JSONP nativamente con `callback` parameter
 - JSONP permite comunicación cross-origin sin CORS porque los script tags no tienen restricciones
+- Para proteger el script basta con un token comparado en doGet/doPost
+
+**Completado adicional (en la misma sesión):**
+- Token de seguridad: Apps Script verifica `TOKEN` en cada request
+- App: campo `sheetsToken` en config, se envía en POST y JSONP
+- La app no envía datos si no hay token configurado
 
 **Próximo paso:**
 - El usuario debe actualizar el código del Apps Script en script.google.com

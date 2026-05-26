@@ -20,6 +20,8 @@ Luego preguntar al usuario qué desea hacer.
 
 **Notas importantes (no olvidar):**
 - URL actual del Apps Script: https://script.google.com/macros/s/AKfycbx0VIxBU714hlRRZ3riMtJzWpU0j3DTTqLf4OJD1AsclcW6NI_2IlpYLx3bwE7orVnH/exec
+- Se agregó token de seguridad: hay que cambiar `mi_token_secreto` en Apps Script + app
+- Sin token no se puede leer ni escribir en la planilla
 - El script busca la planilla "GastosCMR" en Drive, si no existe la crea
 - Los datos viajan como text/plain (no-cors) por compatibilidad con Apps Script
 - Las categorías se persisten en localStorage (clave: mis_transferencias_categorias)
