@@ -1,0 +1,104 @@
+# REGISTRO DE SESIONES
+
+> Historial cronológico de todas las sesiones de trabajo en este proyecto.
+> El más reciente va primero.
+
+---
+
+## Cómo agregar una entrada
+
+Al cerrar cada sesión, agregar una entrada arriba del todo con el formato de abajo.
+Ser honesto con los problemas — ayuda a evitar repetirlos.
+
+---
+
+## 2026-05-26 Sesión inicial — Gráficos, pestañas y categorías dinámicas
+
+**Duración aproximada:** 1 hora
+
+**Completado:**
+- Se trajo `index.html` desde `github.com/anibalcampos/mis-transferencias`
+- Se agregó Chart.js 4.4.1 desde CDN
+- Se implementaron 3 pestañas: Tabla, Gráficos, Línea de tiempo
+- Gráfico de barras: gasto mensual con colores por estado (pasado/actual/futuro)
+- Gráfico de torta: distribución por categoría con paleta de colores dinámica
+- Gráfico de línea: evolución acumulada mes a mes
+- Línea de tiempo visual: cada columna = mes, cada celda = valor de cuota
+- Modal modificado: ahora "Monto por cuota" en vez de "Monto total" (se calcula total = cuota × N)
+- Categorías dinámicas: botón + en el modal para agregar categorías nuevas, se persisten en localStorage
+- Paleta de 10 colores para categorías dinámicas (se asignan automáticamente por índice)
+- Se poblaron los archivos de documentación (CONTEXTO.md, TRASPASO.md, TAREAS.md)
+
+**Problemas encontrados:**
+- PowerShell 5.1 no soporta operador ternario `? :` → se usó if/else
+- Los caracteres con tilde (ó) se mostraban como `�` en la consola pero están correctamente codificados como UTF-8 en el archivo
+- Chart.js requiere que el canvas esté visible al inicializar → se agregó setTimeout al cambiar de pestaña
+
+**Aprendizajes:**
+- requestAnimationFrame posterga la renderización de charts hasta que el DOM esté listo
+- Para categorías dinámicas conviene usar inline styles en vez de clases CSS predefinidas
+
+**Próximo paso:**
+- Preguntar al usuario qué desea hacer a continuación
+
+---
+
+## [YYYY-MM-DD] [Título descriptivo de la sesión]
+
+**Duración aproximada:** [X horas]
+
+**Completado:**
+- [cosa 1 que se hizo]
+- [cosa 2 que se hizo]
+
+**Problemas encontrados:**
+- [problema] → [cómo se resolvió]
+
+**Aprendizajes:**
+- [algo nuevo o no obvio que se descubrió]
+
+**Próximo paso:**
+- [acción concreta para la siguiente sesión]
+
+---
+
+## Ejemplo real de cómo debería verse:
+
+```
+## 2026-05-21 Implementación de OCR local para imágenes
+
+**Duración aproximada:** 2 horas
+
+**Completado:**
+- Se reemplazó pytesseract por easyocr para OCR de imágenes
+- Se probó con 4 imágenes distintas (screenshots, fotos de documentos)
+- Se actualizó AGENTS.md con instrucciones de instalación de easyocr
+- Se procesaron archivos reales: Circular14.pdf, Carta funcionarios.docx
+
+**Problemas encontrados:**
+- easyocr descarga modelos la primera vez y tarda ~5 minutos → se documentó en CONTEXTO.md
+- Una imagen en formato TIFF no fue reconocida → convertirla a PNG primero resuelve el problema
+
+**Aprendizajes:**
+- easyocr es mucho más fácil de instalar que pytesseract en Windows
+- Las imágenes con texto muy pequeño (< 8pt) tienen baja precisión con easyocr
+- markitdown puede procesar URLs de YouTube directamente sin descargar el video
+
+**Próximo paso:**
+- Probar soporte para archivos .epub
+- Implementar función parse_epub() en convertir.py línea 87
+
+---
+
+## 2026-05-19 Sesión inicial — Estructura base
+
+**Duración aproximada:** 1.5 horas
+
+**Completado:**
+- Se creó estructura de carpetas del proyecto
+- Se instaló markitdown y se probó con un PDF simple
+- Se crearon scripts convertir.py y monitor.py
+
+**Próximo paso:**
+- Agregar soporte para imágenes con OCR
+```
