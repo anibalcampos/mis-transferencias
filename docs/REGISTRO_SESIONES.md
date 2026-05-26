@@ -12,6 +12,32 @@ Ser honesto con los problemas — ayuda a evitar repetirlos.
 
 ---
 
+## 2026-05-26 Segunda parte — Google Sheets y push a GitHub
+
+**Duración aproximada:** 30 min
+
+**Completado:**
+- Se creó `codigo_google_apps_script.js` con el código para sincronizar con Google Sheets
+- Se inicializó git, commit y push al repositorio anibalcampos/mis-transferencias
+- Se renombró rama master → main y se forzó push
+- GitHub Pages actualizado con los cambios (gráficos, pestañas, categorías dinámicas)
+- Se creó implementación en Google Apps Script
+- Se conectó la app con la URL del script (conexión exitosa)
+- Se corrigió el script para crear planilla "GastosCMR" automáticamente (DriveApp.create en vez de getActiveSpreadsheet)
+
+**Problemas encontrados:**
+- Token fine-grained no tenía acceso al repo → se usó autenticación via browser
+- Rama master vs main → se renombró y forzó push
+- getActiveSpreadsheet() no funciona sin hoja vinculada → se reemplazó por DriveApp.getFilesByName + SpreadsheetApp.create
+- El asistente entró en modo plan al proponer pasos → se resolvió al cerrar/reabrir sesión
+
+**Próximo paso:**
+- En script.google.com: reemplazar el código viejo por el nuevo que crea la planilla "GastosCMR"
+- Re-implementar (Implementar → Gestionar implementaciones → Editar → Implementar)
+- En la app: Probar conexión → Autorizar permisos → Agregar un gasto de prueba
+
+---
+
 ## 2026-05-26 Sesión inicial — Gráficos, pestañas y categorías dinámicas
 
 **Duración aproximada:** 1 hora
