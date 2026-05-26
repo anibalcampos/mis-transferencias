@@ -1,7 +1,45 @@
 const NOMBRE_HOJA = 'Transferencias';
 
 function doGet(e) {
-  return ContentService.createTextOutput(JSON.stringify({ ok: false, error: 'Usa POST para guardar datos' }));
+  if (e && e.parameter && e.parameter.action === 'read') {
+    const data = leerGastos();
+    const payload = JSON.stringify({ ok: true, gastos: data });
+    if (e.parameter.callback) {
+      return ContentService.createTextOutput(e.parameter.callback + '(' + payload + ')')
+        .setMimeType(ContentService.MimeType.JAVASCRIPT);
+    }
+    return ContentService.createTextOutput(payload);
+  }
+  return ContentService.createTextOutput(JSON.stringify({ ok: false, error: 'Acción no válida' }));
+}
+
+function leerGastos() {
+  const ss = getSpreadsheet_();
+  const sheet = ss.getSheetByName(NOMBRE_HOJA);
+  if (!sheet) return [];
+  const data = sheet.getDataRange().getValues();
+  if (data.length <= 1) return [];
+  const headers = data[0];
+  const idIdx = headers.indexOf('ID');
+  const descIdx = headers.indexOf('Descripción');
+  const catIdx = headers.indexOf('Categoría');
+  const montoIdx = headers.indexOf('Monto Total');
+  const cuotasIdx = headers.indexOf('Cuotas');
+  const inicioIdx = headers.indexOf('Inicio');
+  if (idIdx === -1) return [];
+  const gastos = [];
+  for (let i = 1; i < data.length; i++) {
+    const row = data[i];
+    gastos.push({
+      id: row[idIdx],
+      desc: row[descIdx] || '',
+      cat: row[catIdx] || '',
+      monto: Number(row[montoIdx]) || 0,
+      cuotas: Number(row[cuotasIdx]) || 1,
+      inicio: row[inicioIdx] || ''
+    });
+  }
+  return gastos;
 }
 
 function doPost(e) {
