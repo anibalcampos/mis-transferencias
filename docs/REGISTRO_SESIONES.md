@@ -12,7 +12,33 @@ Ser honesto con los problemas — ayuda a evitar repetirlos.
 
 ---
 
-## 2026-05-26 Tercera parte — Carga desde Google Sheets (lectura)
+## 2026-05-26 Cuarta parte — Programado, editar, colapsar meses
+
+**Duración aproximada:** 30 min
+
+**Completado:**
+- Campo "Programado": checkbox en tabla para marcar si ya se programó en el banco
+- Apps Script: columna "Programado" (Sí/No) en la planilla Google Sheets
+- Botón Editar (✎) en cada fila: abre el modal con datos precargados
+- Modal cambia título según sea "Nueva transferencia" o "Editar transferencia"
+- Meses pasados colapsados por defecto en la tabla (▶ click para expandir)
+- Filtro "Pendientes" en toolbar para ver solo lo no programado
+- Métrica "Por programar" con contador de items pendientes
+- Seguridad: token secreto para proteger planilla
+
+**Problemas encontrados:**
+- `no-cors` no permite leer respuestas → se usó JSONP para lectura
+- Hubo que actualizar colspans al agregar columnas nuevas en la tabla
+
+**Aprendizajes:**
+- Un simple token en el payload es suficiente para proteger un Apps Script
+- JSONP con script tags permite comunicación cross-origin sin CORS
+- Los meses pasados se pueden colapsar con onclick en el header + toggle de display
+
+**Próximo paso:**
+- Preguntar al usuario qué desea hacer a continuación
+
+---
 
 **Duración aproximada:** 15 min
 

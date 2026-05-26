@@ -11,7 +11,6 @@
 
 ## 🟡 Media prioridad (próxima sesión)
 
-- [ ] Agregar edición de gastos existentes
 - [ ] Confirmar antes de eliminar con modal en vez de confirm()
 
 ## 🟢 Baja prioridad (cuando haya tiempo)
@@ -22,6 +21,11 @@
 
 ## ✅ Completadas (historial)
 
+- [x] Token de seguridad para proteger planilla *(2026-05-26)*
+- [x] Editar gastos existentes desde modal *(2026-05-26)*
+- [x] Campo "Programado" con toggle en tabla + columna en Sheets *(2026-05-26)*
+- [x] Meses pasados colapsables en tabla *(2026-05-26)*
+- [x] Filtro "Pendientes" y métrica "Por programar" *(2026-05-26)*
 - [x] Carga desde Google Sheets (lectura vía JSONP + botón Cargar + auto-sync) *(2026-05-26)*
 - [x] Google Sheets: guardar gastos automáticamente al agregar *(2026-05-26)*
 - [x] Apps Script: crear planilla "GastosCMR" automáticamente en Drive *(2026-05-26)*

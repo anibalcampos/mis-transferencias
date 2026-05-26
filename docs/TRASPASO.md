@@ -8,19 +8,18 @@
 ## Estado al 2026-05-26
 
 **Última tarea activa:**
-Se agregó carga desde Google Sheets (lectura vía JSONP) con botón "Cargar"
-y auto-sync al abrir la página. La app ahora escribe y lee de la planilla "GastosCMR".
+Se agregó campo "Programado" con toggle en tabla, botón Editar (✎) con modal,
+meses pasados colapsables, filtro "Pendientes", y token de seguridad.
 
 **Estado general:**
 En progreso
 
 **Próximo paso concreto:**
-Actualizar el código del Apps Script en script.google.com (tiene el nuevo `action=read`).
-Luego preguntar al usuario qué desea hacer.
+Preguntar al usuario qué desea hacer a continuación.
 
 **Notas importantes (no olvidar):**
 - URL actual del Apps Script: https://script.google.com/macros/s/AKfycbx0VIxBU714hlRRZ3riMtJzWpU0j3DTTqLf4OJD1AsclcW6NI_2IlpYLx3bwE7orVnH/exec
-- Se agregó token de seguridad: hay que cambiar `mi_token_secreto` en Apps Script + app
+- Token de seguridad: cambiar `mi_token_secreto` en Apps Script + pegar el mismo en la app
 - Sin token no se puede leer ni escribir en la planilla
 - El script busca la planilla "GastosCMR" en Drive, si no existe la crea
 - Los datos viajan como text/plain (no-cors) por compatibilidad con Apps Script
@@ -38,9 +37,14 @@ Completada la integración con Google Sheets
 - App publicada en GitHub Pages con gráficos, pestañas y timeline
 - Categorías dinámicas con paleta de colores automática
 - Modal con monto por cuota
+- Editar gastos existentes (✎)
+- Campo "Programado" con toggle en tabla
+- Meses pasados colapsables en tabla
+- Filtro "Pendientes" y métrica "Por programar"
 - Exportar/Importar JSON
-- Sincronización con Google Sheets (planilla "GastosCMR") — guardar y cargar
+- Sincronización con Google Sheets (guardar y cargar)
 - Carga automática desde Sheets al abrir la página
+- Token de seguridad para proteger la planilla
 - Persistencia local con localStorage
 
 **¿Qué está incompleto?**
@@ -53,9 +57,9 @@ Completada la integración con Google Sheets
 
 | Fecha | Qué se hizo |
 |-------|-------------|
+| 2026-05-26 | Programado, Editar, Meses colapsables, Token seguridad |
 | 2026-05-26 | Carga desde Sheets (JSONP + botón + auto-sync) |
 | 2026-05-26 | Google Sheets funcionando: planilla GastosCMR creada automáticamente |
-| 2026-05-26 | Gráficos, pestañas, timeline, categorías dinámicas |
 
 > Ver `REGISTRO_SESIONES.md` para el historial completo.
 
